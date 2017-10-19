@@ -66,9 +66,19 @@ describe Travis::Build::Script::Csharp, :sexp do
       should include_sexp [:echo, "\"foo\" is either an invalid version of \"mono\" or unsupported on this operating system.\nView valid versions of \"mono\" at https://docs.travis-ci.com/user/languages/csharp/"]
     end
 
+    it 'throws a error with an invalid Mono version as float' do
+      data[:config][:mono] = 5.2
+      should include_sexp [:echo, "\"5.2\" is either an invalid version of \"mono\" or unsupported on this operating system.\nView valid versions of \"mono\" at https://docs.travis-ci.com/user/languages/csharp/"]
+    end
+
     it 'throws a error with an invalid .NET Core version' do
       data[:config][:dotnet] = 'foo'
       should include_sexp [:echo, "\"foo\" is either an invalid version of \"dotnet\" or unsupported on this operating system.\nView valid versions of \"dotnet\" at https://docs.travis-ci.com/user/languages/csharp/"]
+    end
+
+    it 'throws a error with an invalid .NET Core version as float' do
+      data[:config][:dotnet] = 2.0
+      should include_sexp [:echo, "\"2.0\" is either an invalid version of \"dotnet\" or unsupported on this operating system.\nView valid versions of \"dotnet\" at https://docs.travis-ci.com/user/languages/csharp/"]
     end
 
     it 'throws a error with an invalid version' do
@@ -218,10 +228,7 @@ describe Travis::Build::Script::Csharp, :sexp do
     it 'installs dotnet 2.0 preview 2 and above' do
       data[:config][:os] = 'osx'
       data[:config][:dotnet] = '2.0.0-preview2-006497'
-      should include_sexp [:cmd, "brew install openssl", timing: true, assert: true]
-      should include_sexp [:cmd, "mkdir -p /usr/local/lib", assert: true]
-      should include_sexp [:cmd, "ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /usr/local/lib/", assert: true]
-      should include_sexp [:cmd, "ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/", assert: true]
+      should_not include_sexp [:cmd, "brew install openssl", timing: true, assert: true]
       should include_sexp [:cmd, "wget --retry-connrefused --waitretry=1 -O /tmp/dotnet.pkg https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.0-preview2-006497/dotnet-sdk-2.0.0-preview2-006497-osx-x64.pkg", timing: true, assert: true, echo: true]
       should include_sexp [:cmd, "sudo installer -package \"/tmp/dotnet.pkg\" -target \"/\" -verboseR", timing: true, assert: true]
       should include_sexp [:cmd, "eval $(/usr/libexec/path_helper -s)", assert: true]
