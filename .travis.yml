@@ -2,6 +2,8 @@ language: ruby
 
 cache:
   bundler: true
+  edge: true
+  branch: sudo
 
 dist: trusty
 
