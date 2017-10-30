@@ -185,6 +185,7 @@ module Travis
               command << " -v '< 1.9' " if pre_19
               command << "-*.gem --local" if edge == 'local' || edge.respond_to?(:fetch)
               command << " --pre" if edge
+              sh.echo command
               command
             end
 
