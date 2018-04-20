@@ -40,6 +40,7 @@ module Travis
 
           install_mono if is_mono_enabled
           install_dotnet if is_dotnet_enabled
+          export_standardci_env_vars
         end
 
         def install_mono
@@ -170,6 +171,12 @@ View valid versions of \"dotnet\" at https://docs.travis-ci.com/user/languages/c
               sh.failure "Operating system not supported: #{config_os}"
             end
           end
+        end
+
+        def export_standardci_env_vars
+          sh.cmd 'export STANDARD_CI_SOURCE_REVISION_ID="${TRAVIS_COMMIT}"'
+          sh.cmd 'export STANDARD_CI_REPOSITORY_URL="https://github.com/${TRAVIS_REPO_SLUG}"'
+          sh.cmd 'export STANDARD_CI_REPOSITORY_TYPE=git'
         end
 
         def announce
