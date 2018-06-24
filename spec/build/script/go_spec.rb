@@ -101,7 +101,7 @@ describe Travis::Build::Script::Go, :sexp do
     end
   end
 
-  %w(1.3 1.5 1.6 1.9 1.10.x master).each do |recent_go_version|
+  %w(1.3 1.5 1.6 1.9 1.10.x 1.x master).each do |recent_go_version|
     describe "if no Makefile exists on #{recent_go_version}" do
       it 'installs with go get -t' do
         data[:config][:go] = recent_go_version
@@ -130,7 +130,7 @@ describe Travis::Build::Script::Go, :sexp do
     end
   end
 
-  %w(1.6 tip).each do |go_version|
+  %w(1.6 1.x tip).each do |go_version|
     describe "when using version (#{go_version}) with proper versioning support" do
       let(:sexp) { sexp_find(sexp_filter(subject, [:if, '$GO15VENDOREXPERIMENT != 0'])[0], [:then]) }
       it 'tests with vendoring support with `$GO15VENDOREXPERIMENT != 0`' do

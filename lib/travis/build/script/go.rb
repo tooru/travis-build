@@ -137,6 +137,9 @@ module Travis
             if !go_version[/^[0-9]/] # if we don't have a semver version that Gem::Version can read
               return Gem::Version.new('0.0.1') # return a consistent result
             end
+            if go_version == "1.x"
+              return Gem::Version.new('1.10.x')
+            end
             Gem::Version.new(go_version)
           end
 
